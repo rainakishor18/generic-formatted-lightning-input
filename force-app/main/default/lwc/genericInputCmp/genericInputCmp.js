@@ -150,7 +150,7 @@ export default class GenericInputCmp extends LightningElement {
     validateLength()
     {
         console.log('validateLength -');
-        return this.inputLength>=this.inputValue.length;
+        return this.inputLength>=(this.inputValue?this.inputValue.length:0);
     }
 
     validateCharPattern(charOnlyMode)
