@@ -17,6 +17,7 @@ export default class GenericInputCmp extends LightningElement {
     //Input Component variant property
     @api variant;
 
+    //Regex expressions
     alphaOnlyUppCsRgx=new RegExp('[A-Z]');
     alphaOnlyLowCsRgx=new RegExp('[a-z]');
     alphaOnlyRgx=new RegExp('[A-Za-z]');
@@ -24,6 +25,7 @@ export default class GenericInputCmp extends LightningElement {
     alphaUppCsNumRgx=new RegExp('[A-Z0-9]');
     alphaLowCsNumRgx=new RegExp('[a-z0-9]');
     numOnlyRgx=new RegExp('[0-9]');
+    //Regex Mappping
     regexMap = new Map([
     ['X', this.alphaOnlyUppCsRgx],
     ['x', this.alphaOnlyLowCsRgx],
@@ -51,7 +53,7 @@ export default class GenericInputCmp extends LightningElement {
     }
     get msgWhenTooLong()
     {
-        return this.messageWhenTooLong?this.messageWhenTooLong:'Text too long (max length='+this.inputLength+')';
+        return this.messageWhenTooLong?this.messageWhenTooLong:'Text too long (max length='+this.inpuPatternLength+')';
     }
     get textValue()
     {
@@ -61,7 +63,7 @@ export default class GenericInputCmp extends LightningElement {
     {
         let oldValue=this.inputValue;
         this.inputValue=value;
-        console.log('set textValue -',value);        
+        console.log('set textValue -',value);
         if(oldValue!==value)
         {
             this.checkValidity();
@@ -77,7 +79,7 @@ export default class GenericInputCmp extends LightningElement {
         this.inputPattern=value;
         this.reset();
     }
-    get inputLength()
+    get inpuPatternLength()
     {
         return this.inputPattern?this.inputPattern.length:255;
     }
@@ -104,44 +106,20 @@ export default class GenericInputCmp extends LightningElement {
             {
                 v1  : {errMsg : this.msgWhenTooLong, vMethod: this.validateLength},
                 v2  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateCharPattern},
-                v3  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateTextPattern}
+                v3  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateEntireText}
             }
             this.isValid=elem.checkValidity();
             while(this.isValid && validationObj.hasOwnProperty('v'+ctr))
             {
-                let methods=validationObj['v'+ctr].vMethod.bind(this);
-                this.isValid=methods(charOnlyMode);
-                console.log('validationObj -',validationObj['v'+ctr]);
+                let validationMethod=validationObj['v'+ctr].vMethod.bind(this);
+                this.isValid=validationMethod(charOnlyMode);
                 errMsg=this.isValid?'':validationObj['v'+ctr].errMsg;
-                console.log('this.isValid -',this.isValid);
-                console.log('errMsg -',errMsg);
                 ctr++;
             }
             if(!this.isValid && errMsg)
             {
                 elem.setCustomValidity(errMsg);
-            }
-
-            /*if(this.inputValue)
-            {
-                if(this.inputValue.length>this.inputLength)
-                {
-                    errMsg=this.msgWhenTooLong();
-                }
-                else if(this.isValid && this.inputPattern)
-                {
-                    let validity=this.validatePattern();
-                    errMsg=validity.isValid?'':this.msgWhenPatternMismatch();
-                }
-                this.isValid=!Boolean(errMsg);
-                elem.setCustomValidity(errMsg);
-
-                if(this.isValid && !elem.checkValidity())
-                {
-                    this.isValid=false;
-                }
-            }*/
-
+            }            
             elem.reportValidity();
         }
         return this.isValid;
@@ -149,70 +127,48 @@ export default class GenericInputCmp extends LightningElement {
 
     validateLength()
     {
-        console.log('validateLength -');
-        return this.inputLength>=(this.inputValue?this.inputValue.length:0);
+        return this.inpuPatternLength>=(this.inputValue?this.inputValue.length:0);
     }
-
-    validateCharPattern(charOnlyMode)
+    validateCharPattern()
     {
-        console.log('validateCharPattern -',charOnlyMode);
-        return this.validatePattern(true);
-    }
-    validateTextPattern(charOnlyMode)
-    {
-        console.log('validateTextPattern -',charOnlyMode);
-        if(!charOnlyMode)
-        {
-            return this.validatePattern();
-        }
-        return true;
-    }
-    validatePattern(charOnlyMode)
-    {
-        console.log('validatePattern -',charOnlyMode);
         let flag=true;
         if(this.inputPattern && this.inputValue)
         {
-            if(!charOnlyMode)
+            let index=0;
+            let lengthToTest=this.inputValue.length;
+            while(index<lengthToTest)
             {
-                flag=this.inputValue && this.inputValue.length===this.inputPattern.length;
-            }
-            else
-            {
-                let index=0;
-                let lengthToTest=this.inputValue.length;
-                while(index<lengthToTest)
+                if(index>=this.inpuPatternLength)
                 {
-                    if(index>=this.inputLength)
-                    {
-                        return false;
-                    }
-                    let charCurrIndex=this.inputValue.charAt(index);
-                    let patrnAtCurrIndex=this.inputPattern.charAt(index);
-                    let charRegex=this.regexMap.has(patrnAtCurrIndex)?this.regexMap.get(patrnAtCurrIndex):patrnAtCurrIndex;
-                    let isRegex=charRegex instanceof RegExp;
-                    if(isRegex && !charRegex.test(charCurrIndex))
-                    {
-                        flag=false;
-                        break;
-                    }
-                    else if(!isRegex && charRegex!==charCurrIndex)
-                    {
-                        this.inputValue=this.inputValue.slice(0,index)+charRegex+this.inputValue.slice(index);
-                        lengthToTest=lengthToTest+1;
-                    }
-                    index++;
+                    return false;
                 }
+                let charCurrIndex=this.inputValue.charAt(index);
+                let patrnAtCurrIndex=this.inputPattern.charAt(index);
+                let charRegex=this.regexMap.has(patrnAtCurrIndex)?this.regexMap.get(patrnAtCurrIndex):patrnAtCurrIndex;
+                let isRegex=charRegex instanceof RegExp;
+                if(isRegex && !charRegex.test(charCurrIndex))
+                {
+                    flag=false;
+                    break;
+                }
+                else if(!isRegex && charRegex!==charCurrIndex)
+                {
+                    this.inputValue=this.inputValue.slice(0,index)+charRegex+this.inputValue.slice(index);
+                    lengthToTest=lengthToTest+1;
+                }
+                index++;
             }
         }
         return flag;
     }
+    validateEntireText(charOnlyMode)
+    {
+        return charOnlyMode?true:(this.inputValue && this.inputPattern?this.inputValue.length===this.inpuPatternLength:true);
+    }
     handleBlur(event)
     {
-        console.log('handleFocusOut -',event);
         this.checkValidity(false);
     }
-
     sendValue()
     {
         // Creates the event with the data.
