@@ -1,5 +1,7 @@
 import { LightningElement,api } from 'lwc';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+const CHAR_ESCAPE='/';
+const INVAILD_PATTERN_MSG="All foward slashes '/' must be escaped with forward slashes '/'.";
 export default class GenericInputCmp extends LightningElement {
 
     //Input Component Unique Id
@@ -38,6 +40,7 @@ export default class GenericInputCmp extends LightningElement {
     isValid=true;
     inputValue;
     inputPattern;
+    patternArray=[];
 
     get inputFieldLabel()
     {
@@ -75,15 +78,47 @@ export default class GenericInputCmp extends LightningElement {
     }
     @api set textPattern(value)
     {
+        this.reset();
         console.log('set textPattern -',value);
         this.inputPattern=value;
-        this.reset();
+        this.constructPatternArray(value);
     }
     get inpuPatternLength()
     {
-        return this.inputPattern?this.inputPattern.length:255;
+        let length=this.patternArray?this.patternArray.length:0;
+        return length?length:255;
     }
-
+    constructPatternArray(patternString)
+    {
+        if(patternString)
+        {
+            let i=0;
+            let length=patternString.length;
+            while(i<length)
+            {
+                let currChar=patternString.charAt(i);
+                let nextChar=patternString.charAt(i+1);
+                let patternChar;
+                if(currChar!==CHAR_ESCAPE)
+                {
+                    patternChar=this.regexMap.has(currChar)?this.regexMap.get(currChar):currChar;
+                    i++;
+                }
+                else if(nextChar===CHAR_ESCAPE || this.regexMap.has(nextChar))
+                {
+                    patternChar=nextChar;
+                    i+=2;
+                }
+                else
+                {
+                    console.error(new Error('Error in parsing pattern : ['+this.inputPattern+' '+INVAILD_PATTERN_MSG));
+                    this.reset();
+                    return;
+                }
+                this.patternArray.push(patternChar);
+            }
+        }
+    }
     handleChange(event)
     {
         console.log('handleChange -',event.target.value);
@@ -119,7 +154,7 @@ export default class GenericInputCmp extends LightningElement {
             if(!this.isValid && errMsg)
             {
                 elem.setCustomValidity(errMsg);
-            }            
+            }
             elem.reportValidity();
         }
         return this.isValid;
@@ -132,7 +167,7 @@ export default class GenericInputCmp extends LightningElement {
     validateCharPattern()
     {
         let flag=true;
-        if(this.inputPattern && this.inputValue)
+        if(this.inpuPatternLength && this.inputValue)
         {
             let index=0;
             let lengthToTest=this.inputValue.length;
@@ -142,16 +177,15 @@ export default class GenericInputCmp extends LightningElement {
                 {
                     return false;
                 }
-                let charCurrIndex=this.inputValue.charAt(index);
-                let patrnAtCurrIndex=this.inputPattern.charAt(index);
-                let charRegex=this.regexMap.has(patrnAtCurrIndex)?this.regexMap.get(patrnAtCurrIndex):patrnAtCurrIndex;
+                let currChar=this.inputValue.charAt(index);
+                let charRegex=this.patternArray[index];
                 let isRegex=charRegex instanceof RegExp;
-                if(isRegex && !charRegex.test(charCurrIndex))
+                if(isRegex && !charRegex.test(currChar))
                 {
                     flag=false;
                     break;
                 }
-                else if(!isRegex && charRegex!==charCurrIndex)
+                else if(!isRegex && charRegex!==currChar)
                 {
                     this.inputValue=this.inputValue.slice(0,index)+charRegex+this.inputValue.slice(index);
                     lengthToTest=lengthToTest+1;
@@ -163,7 +197,7 @@ export default class GenericInputCmp extends LightningElement {
     }
     validateEntireText(charOnlyMode)
     {
-        return charOnlyMode?true:(this.inputValue && this.inputPattern?this.inputValue.length===this.inpuPatternLength:true);
+        return charOnlyMode?true:(this.inputValue && this.inpuPatternLength?this.inputValue.length===this.inpuPatternLength:true);
     }
     handleBlur(event)
     {
@@ -186,6 +220,7 @@ export default class GenericInputCmp extends LightningElement {
     {
         this.isValid=false;
         this.inputValue=null;
+        this.patternArray=[];
         let elem=this.template.querySelector('.'+this.inputFieldId);
         if(elem)
         {
@@ -193,5 +228,17 @@ export default class GenericInputCmp extends LightningElement {
             elem.reportValidity();
         }
         this.sendValue();
+    }
+
+    showToast(title,message,variant) {
+        if (title && message && variant) {
+            this.showToast = true;
+            const evt = new ShowToastEvent({
+                title: title,
+                message: message,
+                variant: variant,
+            });
+            this.dispatchEvent(evt);
+        }
     }
 }
