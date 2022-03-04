@@ -239,10 +239,11 @@ Sequence of reserved characters are used to generate patterns to match input aga
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Base Package - Deployed
+- [ ] Managed Package with Test Suite
+- [ ] Scope for non-fixed length
+- [ ] Incorporate Phone & Date Base Components
+
 
 See the [open issues](https://github.com/rainakishor18/generic-formatted-lightning-input/issues) for a full list of proposed features (and known issues).
 
@@ -291,9 +292,7 @@ Project Link: [https://github.com/rainakishor18/generic-formatted-lightning-inpu
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
