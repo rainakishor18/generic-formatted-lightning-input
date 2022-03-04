@@ -1,0 +1,112 @@
+<template>
+    <lightning-card>
+        
+        <lightning-input    type="text" 
+                            value={textPattern} 
+                            onchange={handlePatternChange}
+                            label="Enter Text Pattern"
+                            placeholder="Enter a pattern"
+                            class="slds-p-left--xx-small"
+
+        ></lightning-input>
+
+        <c-formatted-text-input    text-field-id="Field_API_Name__c" 
+                                label="Field Label"
+                                required 
+                                text-pattern={textPattern}
+                                text-value={object.Field_API_Name__c}
+                                variant="label-stacked"
+                                onchange={handleGenInputChange}
+                                class="genericcmp"                                
+        ></c-formatted-text-input> 
+        <div class="slds-m-top_small slds-m-bottom_medium">
+            <lightning-button label="checkValidity"  onclick={handleActions} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button label="setCustomValidity" onclick={handleActions} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button label="reportValidity"  onclick={handleActions} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button label="showHelpMessageIfInvalid"  onclick={handleActions} class="slds-m-left_x-small"></lightning-button>
+        </div>
+        <div class="slds-m-top_small slds-m-left_x-small slds-m-bottom_medium">
+            Updated data in parent : {object.Field_API_Name__c}
+        </div>
+        <div class="slds-m-top_small slds-m-left_x-small slds-m-bottom_medium">
+            Event output : {output}
+        </div>
+        
+        <div style="padding-right: 39px;">
+            <table class="slds-m-left--small" style="border-style:inherit;">
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top" >
+                    <th  style="padding:5px; border-style:inherit; text-align: center;">Key</th>
+                    <th  style="padding:5px;  border-style:inherit;text-align: center;">Reserved Key</th>
+                    <th  style="padding:5px;  border-style:inherit;text-align: center;">Regex/Value validated</th>
+                    <th  style="padding:5px;  border-style:inherit;text-align: center;">Acceptable Characters</th>
+                    <th  style="padding:5px;  border-style:inherit;text-align: center;">Sample Character</th>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">X</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;" ><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;">RegExp('[A-Z]')</td>
+                    <td style="padding:5px;border-style:inherit;">Upper Case Alphabets</td>
+                    <td style="padding:5px;border-style:inherit; ">‘A’</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">x</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;">RegExp('[a-z]')</td>
+                    <td style="padding:5px;border-style:inherit;">Lower Case Alphabets</td>
+                    <td style="padding:5px;border-style:inherit;border-style:inherit; ">‘a’</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Y</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;">RegExp('[A-Za-z]')</td>
+                    <td style="padding:5px;border-style:inherit;">All Alphabets</td>
+                    <td style="padding:5px;border-style:inherit; border-style:inherit;">‘a’ or ‘A’</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Z</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">RegExp('[A-Za-z0-9]')</td>
+                    <td style="padding:5px;border-style:inherit;">All Alphanumeric characters</td>
+                    <td style="padding:5px;border-style:inherit; ">‘a’ or ‘A’ or ‘9'</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">U</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">RegExp('[A-Z0-9]')</td>
+                    <td style="padding:5px;border-style:inherit;">Upper Case Alphanumeric characters</td>
+                    <td style="padding:5px;border-style:inherit;border-style:inherit; ">‘A’ or ‘9’</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">u</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">RegExp('[a-z0-9]')</td>
+                    <td style="padding:5px;border-style:inherit;">Lower Case Alphanumeric characters</td>
+                    <td style="padding:5px;border-style:inherit; ">‘a’ or ‘9’</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">D</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="Yes" ></lightning-badge></td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">RegExp('[0-9]')</td>
+                    <td style="padding:5px;border-style:inherit;">Digits only</td>
+                    <td style="padding:5px;border-style:inherit; ">‘A’</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Any special character</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="No" class="slds-badge_inverse"  ></lightning-badge></td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">Special character itself</td>
+                    <td style="padding:5px;border-style:inherit;">Special character itself</td>
+                    <td style="padding:5px;border-style:inherit; ">Eg. If set to - , then value accepted is ‘-’ only</td>
+                </tr>
+                <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">/</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;"><lightning-badge label="No" class="slds-badge_inverse"  ></lightning-badge></td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">Escaped Character after ‘/’</td>
+                    <td style="padding:5px;border-style:inherit;">Used to escaped reserved keys and ‘/’</td>
+                    <td style="padding:5px;border-style:inherit; ">/D means ‘D’ is accepted. // means ‘/’ is accepted.</td>
+                </tr>
+            </table>
+        </div>
+       
+
+    </lightning-card>
+</template>

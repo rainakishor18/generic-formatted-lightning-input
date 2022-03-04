@@ -3,13 +3,8 @@
     <apiVersion>52.0</apiVersion>
     <isExposed>true</isExposed>
     <targets>
-        <target>lightning__Tab</target>
         <target>lightning__RecordPage</target>
-        <target>lightningCommunity__Default</target>
-        <target>lightningCommunity__Page</target>
         <target>lightning__HomePage</target>
-        <target>lightning__FlowScreen</target>
-        <target>lightning__RecordAction</target>
         <target>lightning__AppPage</target>
     </targets>
 </LightningComponentBundle>

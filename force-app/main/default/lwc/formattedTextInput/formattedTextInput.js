@@ -2,49 +2,43 @@ import { LightningElement,api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 const CHAR_ESCAPE='/';
 const INVAILD_PATTERN_MSG="All foward slashes '/' must be escaped with forward slashes '/'.";
-export default class GenericInputCmp extends LightningElement {
+export default class FormattedTextInput extends LightningElement {
 
     //Input Component Unique Id
     @api textFieldId;
-    //Input Component Label
-    @api textFieldLabel;
-
-
-    //Error message to be displayed when a pattern mismatch is detected
+    @api label;
     @api messsageWhenPatternMismatch;
-    //Error message to be displayed when the value is too long.
     @api messageWhenTooLong;
-    //Input Component required property
-    @api isRequired=false;
-    //Input Component variant property
+    @api required=false;
     @api variant;
-
-    //Regex expressions
-    alphaOnlyUppCsRgx=new RegExp('[A-Z]');
-    alphaOnlyLowCsRgx=new RegExp('[a-z]');
-    alphaOnlyRgx=new RegExp('[A-Za-z]');
-    alphaNumRgx=new RegExp('[A-Za-z0-9]');
-    alphaUppCsNumRgx=new RegExp('[A-Z0-9]');
-    alphaLowCsNumRgx=new RegExp('[a-z0-9]');
-    numOnlyRgx=new RegExp('[0-9]');
+    @api readOnly=false;
+    @api placeholder;
+    @api name;
+    @api minLength;
+    @api messageWhenValueMissing;
+    @api messageWhenBadInput;
+    @api autocomplete;
+    @api accessKey;
+    @api messageWhenTooShort;
+    @api disabled;
+    @api fieldLevelHelp=null;
     //Regex Mappping
     regexMap = new Map([
-    ['X', this.alphaOnlyUppCsRgx],
-    ['x', this.alphaOnlyLowCsRgx],
-    ['Y', this.alphaOnlyRgx],
-    ['Z', this.alphaNumRgx],
-    ['U', this.alphaUppCsNumRgx],
-    ['u', this.alphaLowCsNumRgx],
-    ['D', this.numOnlyRgx]
+    ['X', new RegExp('[A-Z]')],
+    ['x', new RegExp('[a-z]')],
+    ['Y', new RegExp('[A-Za-z]')],
+    ['Z', new RegExp('[A-Za-z0-9]')],
+    ['U', new RegExp('[A-Z0-9]')],
+    ['u', new RegExp('[a-z0-9]')],
+    ['D', new RegExp('[0-9]')]
     ]);
-    isValid=true;
+    @api valid;
     inputValue;
     inputPattern;
     patternArray=[];
-
-    get inputFieldLabel()
+    connectedCallback()
     {
-        return this.textFieldLabel?this.textFieldLabel:'Generic Input';
+        this.valid=true;
     }
     get inputFieldId()
     {
@@ -56,7 +50,7 @@ export default class GenericInputCmp extends LightningElement {
     }
     get msgWhenTooLong()
     {
-        return this.messageWhenTooLong?this.messageWhenTooLong:'Text too long (max length='+this.inpuPatternLength+')';
+        return this.messageWhenTooLong?this.messageWhenTooLong:'Text too long (max length='+this.maxLength+')';
     }
     get textValue()
     {
@@ -66,10 +60,9 @@ export default class GenericInputCmp extends LightningElement {
     {
         let oldValue=this.inputValue;
         this.inputValue=value;
-        console.log('set textValue -',value);
         if(oldValue!==value)
         {
-            this.checkValidity();
+            this.checkValidity(false,true);
         }
     }
     get textPattern()
@@ -79,11 +72,10 @@ export default class GenericInputCmp extends LightningElement {
     @api set textPattern(value)
     {
         this.reset();
-        console.log('set textPattern -',value);
         this.inputPattern=value;
         this.constructPatternArray(value);
     }
-    get inpuPatternLength()
+    get maxLength()
     {
         let length=this.patternArray?this.patternArray.length:0;
         return length?length:255;
@@ -121,59 +113,67 @@ export default class GenericInputCmp extends LightningElement {
     }
     handleChange(event)
     {
-        console.log('handleChange -',event.target.value);
         this.inputValue=event.target.value;
-        this.checkValidity(true);
+        this.checkValidity(true,true);
         this.sendValue();
-        //let elem=event.srcElement;
     }
 
-    @api checkValidity(charOnlyMode)
+    @api checkValidity(charOnlyMode,reportMode)
     {
-        console.log('checkValidity -',charOnlyMode);
-        let elem=this.template.querySelector('.'+this.inputFieldId);
-        if(elem)
+        if(!this.readOnly && !this.disabled)
         {
-            let errMsg;
-            let ctr=1;
-            elem.setCustomValidity('');
-            let validationObj=
+            let elem=this.template.querySelector('.'+this.inputFieldId);
+            if(elem)
             {
-                v1  : {errMsg : this.msgWhenTooLong, vMethod: this.validateLength},
-                v2  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateCharPattern},
-                v3  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateEntireText}
-            }
-            this.isValid=elem.checkValidity();
-            while(this.isValid && validationObj.hasOwnProperty('v'+ctr))
-            {
-                let validationMethod=validationObj['v'+ctr].vMethod.bind(this);
-                this.isValid=validationMethod(charOnlyMode);
-                errMsg=this.isValid?'':validationObj['v'+ctr].errMsg;
-                ctr++;
-            }
-            if(!this.isValid && errMsg)
-            {
-                elem.setCustomValidity(errMsg);
-            }
-            elem.reportValidity();
+                let errMsg;
+                let ctr=1;
+                elem.setCustomValidity('');
+                let validationObj=
+                {
+                    v1  : {errMsg : this.msgWhenTooLong, vMethod: this.validateLength},
+                    v2  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateCharPattern},
+                    v3  : {errMsg : this.msgWhenPatternMismatch, vMethod: this.validateEntireText}
+                }
+                this.valid=elem.checkValidity();
+                while(this.valid && validationObj.hasOwnProperty('v'+ctr))
+                {
+                    let validationMethod=validationObj['v'+ctr].vMethod.bind(this);
+                    this.valid=validationMethod(charOnlyMode);
+                    errMsg=this.valid?'':validationObj['v'+ctr].errMsg;
+                    ctr++;
+                }
+                if(reportMode)
+                {
+                    if(!this.valid && errMsg)
+                    {
+                        elem.setCustomValidity(errMsg);
+                    }
+                    elem.reportValidity();
+                }
+                
+            }            
         }
-        return this.isValid;
+        else
+        {
+            this.valid=true;
+        }        
+        return this.valid;
     }
 
     validateLength()
     {
-        return this.inpuPatternLength>=(this.inputValue?this.inputValue.length:0);
+        return this.maxLength>=(this.inputValue?this.inputValue.length:0);
     }
     validateCharPattern()
     {
         let flag=true;
-        if(this.inpuPatternLength && this.inputValue)
+        if(this.patternArray.length && this.inputValue)
         {
             let index=0;
             let lengthToTest=this.inputValue.length;
             while(index<lengthToTest)
             {
-                if(index>=this.inpuPatternLength)
+                if(index>=this.maxLength)
                 {
                     return false;
                 }
@@ -197,28 +197,24 @@ export default class GenericInputCmp extends LightningElement {
     }
     validateEntireText(charOnlyMode)
     {
-        return charOnlyMode?true:(this.inputValue && this.inpuPatternLength?this.inputValue.length===this.inpuPatternLength:true);
+        return charOnlyMode?true:(this.inputValue && this.patternArray.length?this.inputValue.length===this.patternArray.length:true);
     }
     handleBlur(event)
     {
-        this.checkValidity(false);
+        this.checkValidity(false,true);
+        this.sendEvent('blur',event);
     }
     sendValue()
     {
-        // Creates the event with the data.
-        const changeEvent = new CustomEvent('change', {
-        detail: {
-            isValid:this.isValid,
+        this.sendEvent('change',{
+            valid:this.valid,
             value:this.inputValue,
             name:this.inputFieldId
-        }
         });
-        // Dispatches the event.
-        this.dispatchEvent(changeEvent);
     }
     reset()
     {
-        this.isValid=false;
+        this.valid=true;
         this.inputValue=null;
         this.patternArray=[];
         let elem=this.template.querySelector('.'+this.inputFieldId);
@@ -240,5 +236,32 @@ export default class GenericInputCmp extends LightningElement {
             });
             this.dispatchEvent(evt);
         }
+    }
+    handleFocus(event)
+    {
+        this.sendEvent('focus',event);
+    }
+    @api setCustomValidity(msg)
+    {
+        let elem=this.template.querySelector('.'+this.inputFieldId);
+        elem.setCustomValidity(msg);
+        this.valid=!msg;
+
+    }
+    @api reportValidity()
+    {
+        return this.checkValidity(false,true);
+    }
+    @api showHelpMessageIfInvalid()
+    {
+        return this.checkValidity(false,true);
+
+    }
+    sendEvent(name,data)
+    {
+        const event = new CustomEvent(name, {
+        detail: data});
+        // Dispatches the event.
+        this.dispatchEvent(event);
     }
 }
