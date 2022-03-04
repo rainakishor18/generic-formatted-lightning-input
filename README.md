@@ -26,7 +26,7 @@ Generic Formatted Lightning Input
 <br />
 <div align="center">
   <a href="https://github.com/rainakishor18/generic-formatted-lightning-input">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/gilbarbara/logos/blob/master/logos/git-icon.svg" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Generic Formatted Lightning Input</h3>
@@ -77,10 +77,11 @@ Generic Formatted Lightning Input
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+<div align="center">
+<img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/feature-readme-update/assets/genericformattedinputdemo.PNG" alt="Screenshot" >
+</div>
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-You can use this component if
+You can use this component if -
 * You need a fixed length input
 * You need to validate the input against specific pattern.
 * You need to autoformat the input on the go based on the pattern.
@@ -112,11 +113,12 @@ NA
 
 ### Installation
 
-1. Clone the repo
+1. Clone the repo to get components
    ```sh
    git clone https://github.com/rainakishor18/generic-formatted-lightning-input.git
    ```
-2. Embed the demoCmp into a Lightning Record/Home/App page to test it out.
+2. Deploy components to org
+3. Embed the demoCmp into a Lightning Record/Home/App page to test it out.
    
 
 <p align="right">(<a href="#top">back to top</a>)</p>
