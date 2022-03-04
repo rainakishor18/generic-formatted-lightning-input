@@ -26,7 +26,7 @@ Generic Formatted Lightning Input
 <br />
 <div align="center">
   <a href="https://github.com/rainakishor18/generic-formatted-lightning-input">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/gilbarbara/logos/blob/master/logos/git-icon.svg" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Generic Formatted Lightning Input</h3>
