@@ -1,16 +1,16 @@
 import { LightningElement, track } from 'lwc';
 
-export default class GenericInputContainer extends LightningElement {
+export default class DemoCmp extends LightningElement {
 
-    @track textPattern='(XX-DD)';
+    @track textPattern='(/DD//D/D)';
     @track object={Field_API_Name__c:null};
+    @track output;
     handlePatternChange(event)
     {
         this.textPattern=event.target.value;
     }
     handleGenInputChange(event)
     {
-        console.log('handleChange -');
         if(event.detail && event.detail.name)
         {
             let data={target:event.detail};
@@ -20,6 +20,14 @@ export default class GenericInputContainer extends LightningElement {
     handleChange(event)
     {
         this.object[event.target.name]=event.target.value;
-        console.log('handleChange -',JSON.stringify(this.object));
+    }
+    handleActions(event)
+    {
+        let action=event.target.label;
+        const elem=this.template.querySelector('.genericcmp');
+        if(elem)
+        {
+            this.output="Executed "+action+"(). Result ="+elem[action]();
+        }
     }
 }
