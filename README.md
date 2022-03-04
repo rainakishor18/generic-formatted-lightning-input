@@ -95,7 +95,6 @@ You can use this component if
 * [Lighning Web Components](https://developer.salesforce.com/docs/component-library/documentation/lwc)
 * [JavaScript](https://www.javascript.com)
 * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
-* 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
