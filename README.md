@@ -37,7 +37,7 @@ Generic Formatted Lightning Input
     <a href="https://github.com/rainakishor18/generic-formatted-lightning-input"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/rainakishor18/generic-formatted-lightning-input">View Demo</a>
+    <a href="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/main/assets/genericFornattedInputDemoGIF_AdobeCreativeCloudExpress.gif">View Demo</a>
     ·
     <a href="https://github.com/rainakishor18/generic-formatted-lightning-input/issues">Report Bug</a>
     ·
@@ -79,7 +79,7 @@ Generic Formatted Lightning Input
 ## About The Project
 
 <div align="center">
-<img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/feature-readme-update/assets/genericFornattedInputDemoGIF_AdobeCreativeCloudExpress.gif" alt="Screenshot" >
+<img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/main/assets/genericFornattedInputDemoGIF_AdobeCreativeCloudExpress.gif" alt="Screenshot" >
 </div>
 
 
@@ -106,8 +106,8 @@ You can use this component if -
 <!-- GETTING STARTED -->
 ## Getting Started
 The repository has the below to components - 
-*formattedTextInput - Component which can be used instead of lightnin-input for text type 
-*demoCmp - working sample component which can be used to test, explore and understand features of formattedTextInput.
+* formattedTextInput - Component which can be used instead of lightnin-input for text type 
+* demoCmp - working sample component which can be used to test, explore and understand features of formattedTextInput.
 ### Prerequisites
 
 NA
@@ -294,6 +294,8 @@ Project Link: [https://github.com/rainakishor18/generic-formatted-lightning-inpu
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+
+I would like to thank my colleagues who helped me test the component and explore features to be added.
 
 
 
