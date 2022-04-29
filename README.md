@@ -81,7 +81,8 @@ Generic Formatted Lightning Input
 <img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/feature-readme-update/assets/genericformattedinputdemo.PNG" alt="Screenshot" >
 </div>
 <div align="center">
-https://user-images.githubusercontent.com/47567651/165943194-dba67a33-286e-4ac6-864b-3d401c942b2b.mov
+![genericFornattedInputDemoGIF_AdobeCreativeCloudExpress](https://user-images.githubusercontent.com/47567651/165945670-3b035fac-2b72-4c38-94a4-2012cb76cf8f.gif)
+
 </div>
 You can use this component if -
 * You need a fixed length input
