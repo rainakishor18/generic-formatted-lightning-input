@@ -81,6 +81,8 @@ Generic Formatted Lightning Input
 <div align="center">
 <img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/feature-readme-update/assets/genericFornattedInputDemoGIF_AdobeCreativeCloudExpress.gif" alt="Screenshot" >
 </div>
+
+
 You can use this component if -
 * You need a fixed length input
 * You need to validate the input against specific pattern.
