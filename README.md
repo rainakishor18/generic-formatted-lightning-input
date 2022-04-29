@@ -106,8 +106,8 @@ You can use this component if -
 <!-- GETTING STARTED -->
 ## Getting Started
 The repository has the below to components - 
-*formattedTextInput - Component which can be used instead of lightnin-input for text type 
-*demoCmp - working sample component which can be used to test, explore and understand features of formattedTextInput.
+* formattedTextInput - Component which can be used instead of lightnin-input for text type 
+* demoCmp - working sample component which can be used to test, explore and understand features of formattedTextInput.
 ### Prerequisites
 
 NA
