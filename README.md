@@ -77,9 +77,11 @@ Generic Formatted Lightning Input
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+
 <div align="center">
-<img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/feature-readme-update/assets/genericformattedinputdemo.PNG" alt="Screenshot" >
+<img src="https://github.com/rainakishor18/generic-formatted-lightning-input/blob/feature-readme-update/assets/genericFornattedInputDemoGIF_AdobeCreativeCloudExpress.gif" alt="Screenshot" >
 </div>
+
 
 You can use this component if -
 * You need a fixed length input
@@ -197,10 +199,10 @@ Sequence of reserved characters are used to generate patterns to match input aga
                     <td style="padding:5px;border-style:inherit; ">‘A’</td>
                 </tr>
                 <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
-                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Any special character</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Any special character or alphabet or number</td>
                     <td style="padding:5px; text-align: center;border-style:inherit;">No</td>
-                    <td style="padding:5px;text-align: center;border-style:inherit;">Special character itself</td>
-                    <td style="padding:5px;border-style:inherit;">Special character itself</td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">Character itself</td>
+                    <td style="padding:5px;border-style:inherit;">Character itself</td>
                     <td style="padding:5px;border-style:inherit; ">Eg. If set to - , then value accepted is ‘-’ only</td>
                 </tr>
                 <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
