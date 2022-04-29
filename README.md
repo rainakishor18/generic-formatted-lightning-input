@@ -197,10 +197,10 @@ Sequence of reserved characters are used to generate patterns to match input aga
                     <td style="padding:5px;border-style:inherit; ">‘A’</td>
                 </tr>
                 <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
-                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Any special character</td>
+                    <td style="padding:5px; text-align: center;border-style:inherit;padding: 5px; font-style: italic; font-weight: bold;">Any special character or alphabet or number</td>
                     <td style="padding:5px; text-align: center;border-style:inherit;">No</td>
-                    <td style="padding:5px;text-align: center;border-style:inherit;">Special character itself</td>
-                    <td style="padding:5px;border-style:inherit;">Special character itself</td>
+                    <td style="padding:5px;text-align: center;border-style:inherit;">Character itself</td>
+                    <td style="padding:5px;border-style:inherit;">Character itself</td>
                     <td style="padding:5px;border-style:inherit; ">Eg. If set to - , then value accepted is ‘-’ only</td>
                 </tr>
                 <tr class="slds-border--left slds-border--right slds-border--bottom slds-border--top">
